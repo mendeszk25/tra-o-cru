@@ -1,0 +1,123 @@
+/* TRAÇO CRU — Motion Experience V16
+   Original layout, composition, typography, artwork and content are unchanged.
+   All progressive effects activate only after motion.js verifies support.
+*/
+:root{
+  --motion-ease:cubic-bezier(.18,1,.24,1);
+  --motion-deep:cubic-bezier(.16,1,.30,1);
+  --motion-terracotta:#a65e42;
+}
+/* Cinematic typographic line masks, preserving real selectable/accessible text. */
+.motion-line-clip{display:block;overflow:hidden;max-width:100%;padding-block:.065em .055em;margin-block:-.065em -.055em}
+.motion-line-inner{display:block;transform-origin:bottom left;max-width:100%}
+.hero__headline h1 .motion-line-clip{overflow:visible}
+.hero__headline h1 .motion-line-inner{display:block}
+/* Hero wordmark responds to natural scrolling, never to fake 3D photo movement. */
+html.motion-enabled .hero__word--one{
+  transform:translate3d(calc(var(--hero-scroll,0) * -34px),calc(var(--hero-scroll,0) * -49px),0);
+  transform-origin:18% 50%;
+}
+html.motion-enabled .hero__word--two{
+  transform:translate3d(calc(var(--hero-scroll,0) * 34px),calc(var(--hero-scroll,0) * 29px),0);
+  transform-origin:80% 50%;
+}
+/* Ambient copper light accent on the stage. It does not touch the product photo. */
+html.motion-enabled .hero__stage::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent 12%,rgba(197,135,88,.115) 35%,rgba(245,223,190,.15) 41%,transparent 57%);
+  transform:translateX(-130%);opacity:0;
+  animation:tc-hero-light 2.1s .25s var(--motion-ease) both;
+}
+@keyframes tc-hero-light{
+  0%{transform:translateX(-130%);opacity:0}
+  32%{opacity:.75}
+  100%{transform:translateX(140%);opacity:0}
+}
+html.motion-enabled .hero__bottom .down-arrow{animation:tc-arrow-breathe 3.2s 2s ease-in-out infinite}
+@keyframes tc-arrow-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+/* V17.1: former solid paper curtains removed; the narrow accent in
+   motion-v17.css provides the color transition without obscuring content. */
+html.motion-enabled :is(.manifesto,.courses){isolation:isolate}
+html.motion-enabled :is(.manifesto,.courses).motion-entered::after{display:none!important}
+/* In the manifesto and courses the drawn stroke responds to entry. */
+.manifesto__rule svg path,.courses__imprint path{stroke-linecap:round;stroke-linejoin:round}
+html.motion-enabled .manifesto__rule svg{transform-origin:center;transition:filter .5s}
+/* Sculptural gallery: inertial directional imagery and precise caption movement. */
+html.motion-enabled .work__button{perspective:1000px;transform-style:preserve-3d}
+html.motion-enabled .work__image{isolation:isolate;overflow:hidden;transform:translateZ(0)}
+html.motion-enabled .work__image img{
+  transition:transform .8s var(--motion-deep),filter .85s ease;
+  transform-origin:center;
+  will-change:auto;
+}
+@media(hover:hover) and (pointer:fine){
+  html.motion-enabled .work__button:hover .work__image img,
+  html.motion-enabled .work__button:focus-visible .work__image img{
+    transform:scale(1.075) translate3d(calc(var(--motion-x,0) * -8px),calc(var(--motion-y,0) * -8px),0);
+  }
+  html.motion-enabled .work__caption strong{display:inline-block;transition:transform .65s var(--motion-deep)}
+  html.motion-enabled .work__button:hover .work__caption strong{transform:translate3d(0,-5px,0)}
+  html.motion-enabled .work__arrow,html.motion-enabled .work__expand{transition:transform .6s var(--motion-deep),background .35s ease}
+  html.motion-enabled .work__button:hover :is(.work__arrow,.work__expand){transform:translate3d(5px,-5px,0)}
+}
+/* Editorial line-drawing and magnetic arrow microinteraction, hit targets stay put. */
+html.motion-enabled :is(.text-link,.header-contact,.works__direct){position:relative}
+html.motion-enabled :is(.text-link,.header-contact,.works__direct) > span:last-child{
+  display:inline-block;transition:transform .52s var(--motion-deep);
+}
+@media(hover:hover) and (pointer:fine){
+  html.motion-enabled :is(.text-link,.header-contact,.works__direct):hover > span:last-child{
+    transform:translate3d(var(--mag-x,3px),var(--mag-y,-3px),0) rotate(-12deg);
+  }
+  html.motion-enabled :is(.button-outline,.contact__submit):hover > span{
+    transform:translate3d(var(--mag-x,4px),var(--mag-y,-2px),0);
+  }
+}
+html.motion-enabled :is(.button-outline,.contact__submit) > span{display:inline-block;transition:transform .55s var(--motion-deep)}
+/* Animated underline grows directionally beneath text-link controls. */
+html.motion-enabled .text-link::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:currentColor;transform-origin:right;transform:scaleX(0);
+  transition:transform .65s var(--motion-deep);pointer-events:none;
+}
+html.motion-enabled .text-link:is(:hover,:focus-visible)::after{transform-origin:left;transform:scaleX(1)}
+/* Gallery dialog animation in JS retains original native dialog/focus semantics. */
+html.motion-enabled dialog[open]::backdrop{animation:tc-backdrop .55s ease both}
+@keyframes tc-backdrop{from{opacity:0}to{opacity:1}}
+/* Photo frames are revealed by masks; do not alter the actual images/texture. */
+html.motion-enabled :is(.manifesto__picture,.atelier__photo,.ambience__image){isolation:isolate}
+html.motion-enabled :is(.manifesto__picture,.atelier__photo,.ambience__image)::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  border:1px solid rgba(230,210,188,.23);mix-blend-mode:screen;
+}
+html.motion-enabled .material__experience{overflow:clip}
+/* Focus / copy motion. This enhances UI but does not modify validation or send data. */
+html.motion-enabled .contact__form :is(input,textarea,select){transition:border-color .28s ease,background .3s ease,box-shadow .35s ease}
+html.motion-enabled .contact__form :is(input,textarea,select):focus-visible{
+  border-bottom-color:var(--motion-terracotta);background:rgba(255,255,255,.18);
+  box-shadow:0 2px 0 -1px rgba(156,84,53,.42)
+}
+html.motion-enabled .contact__submit{overflow:hidden;position:relative;isolation:isolate}
+html.motion-enabled .contact__submit::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:#986247;
+  transform:translateX(-105%);transition:transform .65s var(--motion-deep)
+}
+html.motion-enabled .contact__submit:is(:hover,:focus-visible)::before{transform:translateX(0)}
+/* Footer sign-off */
+html.motion-enabled .footer__top em{transition:color .5s ease,letter-spacing .7s var(--motion-deep)}
+html.motion-enabled .footer__top:hover em{letter-spacing:.012em;color:#e3b992}
+/* Mobile choreography has larger, clear gestures but no hover reliance or pinning. */
+@media(max-width:650px){
+  html.motion-enabled .hero__stage::after{animation-duration:1.65s}
+  html.motion-enabled .work__image img{transition-duration:.45s}
+  html.motion-enabled .hero__word--one{transform:translate3d(calc(var(--hero-scroll,0) * -12px),calc(var(--hero-scroll,0) * -20px),0)}
+  html.motion-enabled .hero__word--two{transform:translate3d(calc(var(--hero-scroll,0) * 15px),calc(var(--hero-scroll,0) * 11px),0)}
+}
+/* Never make motion a prerequisite for content. Low-motion mode is immediately static. */
+@media(prefers-reduced-motion:reduce){
+  html.motion-enabled *:not(.progress__bar),html.motion-enabled *::before,html.motion-enabled *::after{
+    animation:none!important;transition:none!important;
+  }
+  .motion-line-clip{overflow:visible}
+  .motion-line-inner{transform:none!important;opacity:1!important;filter:none!important}
+}
